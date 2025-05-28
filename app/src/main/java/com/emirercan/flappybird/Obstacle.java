@@ -6,58 +6,58 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 public class Obstacle {
-    private ImageView upperPipe;
-    private ImageView lowerPipe;
-    private static final int OBSTACLE_WIDTH = 200;
-    private static final int GAP_HEIGHT = 600;
-    private static final int MIN_HEIGHT = 200;
-    private int speed = 10;
+    private ImageView upperPipe; // Yukarıdaki borunun görsel nesnesi
+    private ImageView lowerPipe; // Aşağıdaki borunun görsel nesnesi
+    private static final int OBSTACLE_WIDTH = 200; // Boruların genişliği (px)
+    private static final int GAP_HEIGHT = 600; // İki boru arasındaki boşluk (kuşun geçeceği alan)
+    private static final int MIN_HEIGHT = 200; // Boruların alabileceği minimum yükseklik
+    private int speed = 10; // Boruların sola doğru hareket etme hızı (px/frame)
 
     public Obstacle(Context context, RelativeLayout gameLayout, int screenWidth, int screenHeight) {
-        createPipes(context, gameLayout, screenWidth, screenHeight);
+        createPipes(context, gameLayout, screenWidth, screenHeight); // Obstacle nesnesi oluşturulunca boruları yarat
     }
 
     private void createPipes(Context context, RelativeLayout gameLayout, int screenWidth, int screenHeight) {
-        int upperHeight = MIN_HEIGHT + (int)(Math.random() * (screenHeight - GAP_HEIGHT - 2 * MIN_HEIGHT));
-        int lowerHeight = screenHeight - upperHeight - GAP_HEIGHT;
+        int upperHeight = MIN_HEIGHT + (int)(Math.random() * (screenHeight - GAP_HEIGHT - 2 * MIN_HEIGHT)); // Yukarı borunun yüksekliğini rastgele belirle
+        int lowerHeight = screenHeight - upperHeight - GAP_HEIGHT; // Aşağı borunun yüksekliği, boşluk ve yukarı borudan kalan alan
 
-        upperPipe = new ImageView(context);
-        upperPipe.setImageResource(R.drawable.pipegreen);
-        upperPipe.setScaleType(ImageView.ScaleType.FIT_XY);
-        upperPipe.setRotation(180);
-        RelativeLayout.LayoutParams upperParams = new RelativeLayout.LayoutParams(OBSTACLE_WIDTH, upperHeight);
-        upperParams.leftMargin = screenWidth;
-        upperParams.topMargin = 0;
-        upperPipe.setLayoutParams(upperParams);
+        upperPipe = new ImageView(context); // Yeni ImageView nesnesi oluştur (yukarı boru)
+        upperPipe.setImageResource(R.drawable.pipegreen); // Görsel olarak yeşil boru resmi ata
+        upperPipe.setScaleType(ImageView.ScaleType.FIT_XY); // Görseli genişlik ve yüksekliğe göre esnet
+        upperPipe.setRotation(180); // Yukarı boruyu ters çevir (aşağıdan yukarıya doğru gelsin)
+        RelativeLayout.LayoutParams upperParams = new RelativeLayout.LayoutParams(OBSTACLE_WIDTH, upperHeight); // Yukarı boru için boyut bilgisi
+        upperParams.leftMargin = screenWidth; // Ekranın en sağına yerleştir (görünüm dışında başlat)
+        upperParams.topMargin = 0; // Yukarıdan başlasın
+        upperPipe.setLayoutParams(upperParams); // Yukarı boruya bu parametreleri ata
 
-        lowerPipe = new ImageView(context);
-        lowerPipe.setImageResource(R.drawable.pipegreen);
-        lowerPipe.setScaleType(ImageView.ScaleType.FIT_XY);
-        RelativeLayout.LayoutParams lowerParams = new RelativeLayout.LayoutParams(OBSTACLE_WIDTH, lowerHeight);
-        lowerParams.leftMargin = screenWidth;
-        lowerParams.topMargin = upperHeight + GAP_HEIGHT;
-        lowerPipe.setLayoutParams(lowerParams);
+        lowerPipe = new ImageView(context); // Yeni ImageView nesnesi oluştur (aşağı boru)
+        lowerPipe.setImageResource(R.drawable.pipegreen); // Aynı yeşil boru resmi
+        lowerPipe.setScaleType(ImageView.ScaleType.FIT_XY); // Görseli genişlik/yükseklikle orantılı büyüt
+        RelativeLayout.LayoutParams lowerParams = new RelativeLayout.LayoutParams(OBSTACLE_WIDTH, lowerHeight); // Aşağı boru için boyut bilgisi
+        lowerParams.leftMargin = screenWidth; // Ekranın en sağına yerleştir
+        lowerParams.topMargin = upperHeight + GAP_HEIGHT; // Yukarı boru + boşluk kadar aşağıdan başlasın
+        lowerPipe.setLayoutParams(lowerParams); // Aşağı boruya bu parametreleri ata
 
-        gameLayout.addView(upperPipe);
-        gameLayout.addView(lowerPipe);
+        gameLayout.addView(upperPipe); // Oyun sahnesine yukarı boruyu ekle
+        gameLayout.addView(lowerPipe); // Oyun sahnesine aşağı boruyu ekle
     }
 
     public void move() {
-        RelativeLayout.LayoutParams upperParams = (RelativeLayout.LayoutParams) upperPipe.getLayoutParams();
-        RelativeLayout.LayoutParams lowerParams = (RelativeLayout.LayoutParams) lowerPipe.getLayoutParams();
+        RelativeLayout.LayoutParams upperParams = (RelativeLayout.LayoutParams) upperPipe.getLayoutParams(); // Yukarı borunun mevcut konumunu al
+        RelativeLayout.LayoutParams lowerParams = (RelativeLayout.LayoutParams) lowerPipe.getLayoutParams(); // Aşağı borunun mevcut konumunu al
 
-        upperParams.leftMargin -= speed;
-        lowerParams.leftMargin -= speed;
+        upperParams.leftMargin -= speed; // Yukarı boruyu sola kaydır
+        lowerParams.leftMargin -= speed; // Aşağı boruyu sola kaydır
 
-        upperPipe.setLayoutParams(upperParams);
-        lowerPipe.setLayoutParams(lowerParams);
+        upperPipe.setLayoutParams(upperParams); // Yeni konumu uygula
+        lowerPipe.setLayoutParams(lowerParams); // Yeni konumu uygula
     }
 
     public View getUpperPipe() {
-        return upperPipe;
+        return upperPipe; // Yukarı borunun nesnesini döndür (çarpışma kontrolü gibi işlemler için)
     }
 
     public View getLowerPipe() {
-        return lowerPipe;
+        return lowerPipe; // Aşağı borunun nesnesini döndür
     }
 }
