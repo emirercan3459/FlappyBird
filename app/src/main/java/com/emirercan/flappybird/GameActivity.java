@@ -5,7 +5,6 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -15,8 +14,8 @@ import java.util.ArrayList;
 public class GameActivity extends AppCompatActivity {
     private RelativeLayout oyunAlani; // Oyunun oynandığı ana düzen (layout)
     private TextView skorText; // Skoru gösteren TextView
-    private Bird kus; // Kuş karakterini temsil eden sınıf nesnesi
-    private ArrayList<Obstacle> engeller = new ArrayList<>(); // Oyundaki engellerin listesi
+    private Kus kus; // Kuş karakterini temsil eden sınıf nesnesi
+    private ArrayList<Engel> engeller = new ArrayList<>(); // Oyundaki engellerin listesi
     private Handler handler = new Handler(); // Döngü ve zamanlamalar için handler
     private Veritabani veritabani = new Veritabani(this); // Skorları kaydetmek için veritabanı nesnesi
     private boolean oyunBitti = false; // Oyun durumunu tutar (bitti mi?)
@@ -34,7 +33,7 @@ public class GameActivity extends AppCompatActivity {
         ekranYukseklik = getResources().getDisplayMetrics().heightPixels; // Ekran yüksekliğini al
         ekranGenislik = getResources().getDisplayMetrics().widthPixels; // Ekran genişliğini al
         oyuncu = findViewById(R.id.player); // Kuşun görselini al
-        kus = new Bird(findViewById(R.id.player)); // Bird sınıfı ile kuşu oluştur
+        kus = new Kus(findViewById(R.id.player)); // Bird sınıfı ile kuşu oluştur
         KusAnimasyon kusAnimasyon = new KusAnimasyon(findViewById(R.id.player)); // Kuş animasyonu başlatmak için nesne
         kusAnimasyon.start(); // Kuş kanat çırpma animasyonunu başlat
         oyunuBaslat(); // Oyunu başlatan metodu çağır
@@ -61,7 +60,7 @@ public class GameActivity extends AppCompatActivity {
     private void oyunGuncelle() {
         kus.update(ekranYukseklik); // Kuşun pozisyonunu güncelle (yerçekimi vs)
         for (int i = 0; i < engeller.size(); i++) {
-            Obstacle engel = engeller.get(i); // Listedeki engeli al
+            Engel engel = engeller.get(i); // Listedeki engeli al
             engel.move(); // Engeli sola kaydır
             carpismaKontrol(engel); // Kuş ile engel çarpışmasını kontrol et
             skorKontrol(engel); // Kuş engeli geçtiyse skoru arttır
@@ -76,7 +75,7 @@ public class GameActivity extends AppCompatActivity {
                     try {
                         Thread.sleep(3500); // 3.5 saniyede bir yeni engel oluştur
                         runOnUiThread(() -> { // UI thread üzerinde engeli oluştur
-                            Obstacle yeniEngel = new Obstacle(GameActivity.this, oyunAlani, ekranGenislik, ekranYukseklik);
+                            Engel yeniEngel = new Engel(GameActivity.this, oyunAlani, ekranGenislik, ekranYukseklik);
                             engeller.add(yeniEngel); // Yeni engeli listeye ekle
                         });
                     } catch (InterruptedException e) {
@@ -88,7 +87,7 @@ public class GameActivity extends AppCompatActivity {
         engelThread.start(); // Engel üretme thread'ini başlat
     }
 
-    private void carpismaKontrol(Obstacle engel) {
+    private void carpismaKontrol(Engel engel) {
         Rect kusAlani = new Rect();
         kus.getView().getHitRect(kusAlani); // Kuşun alanını dikdörtgen olarak al
 
@@ -102,7 +101,7 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    private void skorKontrol(Obstacle engel) {
+    private void skorKontrol(Engel engel) {
         // Eğer skor daha önce bu engel için alınmadıysa ve kuş üst borunun sağından geçtiyse
         if (!skorAlindi && engel.getUpperPipe().getX() + engel.getUpperPipe().getWidth() < kus.getView().getX()) {
             skor++; // Skoru arttır

@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-public class Obstacle {
+public class Engel {
     private ImageView upperPipe; // Yukarıdaki borunun görsel nesnesi
     private ImageView lowerPipe; // Aşağıdaki borunun görsel nesnesi
     private static final int OBSTACLE_WIDTH = 200; // Boruların genişliği (px)
@@ -13,7 +13,7 @@ public class Obstacle {
     private static final int MIN_HEIGHT = 200; // Boruların alabileceği minimum yükseklik
     private int speed = 10; // Boruların sola doğru hareket etme hızı (px/frame)
 
-    public Obstacle(Context context, RelativeLayout gameLayout, int screenWidth, int screenHeight) {
+    public Engel(Context context, RelativeLayout gameLayout, int screenWidth, int screenHeight) {
         createPipes(context, gameLayout, screenWidth, screenHeight); // Obstacle nesnesi oluşturulunca boruları yarat
     }
 

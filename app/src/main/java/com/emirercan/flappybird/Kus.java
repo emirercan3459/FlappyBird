@@ -2,13 +2,13 @@ package com.emirercan.flappybird;
 
 import android.widget.ImageView;
 
-public class Bird {
+public class Kus {
     private ImageView birdView;  // Kuşun ekrandaki görselini tutar
     private float velocity = 0;  // Kuşun dikey hızını (yönüyle birlikte) tutar
     private final float gravity = 3.5f;  // Yerçekimi kuvveti, kuşun aşağı doğru hızlanmasını sağlar
     private final float jumpForce = -35f;  // Zıplama kuvveti, negatif olduğu için yukarı doğru hareket
 
-    public Bird(ImageView birdView) {
+    public Kus(ImageView birdView) {
         this.birdView = birdView;  // Kuşun görseli dışarıdan alınır ve atanır
     }
 
